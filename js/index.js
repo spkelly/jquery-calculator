@@ -1,11 +1,9 @@
 $(document).ready(function() {
-  'use strict';
-
   var evaluateScreen = function(scrnArray) {
     const opArray = ['+', '-', '÷', 'x', '='];
     let usedOperands = [];
     let numberArray = [];
-    let currentNumber = '';
+    let currentNumber = 0;
 
     for (let i = 0; i < scrnArray.length; i++) {
       if (opArray.includes(scrnArray[i])) {
@@ -15,6 +13,9 @@ $(document).ready(function() {
           return 'ERROR';
         }
         else if (scrnArray[i] === '=') {
+          if (i === 1) {
+            return currentNumber;
+          }
           numberArray.push(currentNumber);
           break;
         }
@@ -29,32 +30,37 @@ $(document).ready(function() {
       }
     }
 
-    let currentAnswer = parseInt(numberArray[0]);
+    let currentAnswer = parseFloat(numberArray[0]);
 
+    // check if no other operands where used besides equals sign
     for (let i = 0; i < usedOperands.length; i++) {
+      let nextDigit = numberArray[i + 1];
+
       switch (usedOperands[i]) {
         case '+':
-          currentAnswer += parseInt(numberArray[i + 1]);
+          currentAnswer += parseFloat(nextDigit);
           break;
         case '-':
-          currentAnswer -= parseInt(numberArray[i + 1]);
+          currentAnswer -= parseFloat(nextDigit);
           break;
         case 'x':
-          currentAnswer *= parseInt(numberArray[i + 1]);
+          currentAnswer *= parseFloat(nextDigit);
           break;
         case '÷':
-          if (numberArray[i + 1] == 0) {
+          if (nextDigit === '0') {
             return 'ERROR';
           }
-          currentAnswer /= parseInt(numberArray[i + 1]);
+          currentAnswer /= parseFloat(nextDigit);
           break;
         default:
           return 'ERROR';
       }
-
-      return currentAnswer;
     }
+
+    return currentAnswer;
   };
+
+  // declaring variables
   const screen = $('#screen');
   const equalButton = $('#equals');
   const clearButton = $('#clear');
@@ -75,6 +81,7 @@ $(document).ready(function() {
 
   clearButton.click(function() {
     screen.empty();
+    screenLock = false;
     screenArray = [];
   });
 
@@ -86,8 +93,12 @@ $(document).ready(function() {
     answer = evaluateScreen(screenArray);
     if (answer === 'ERROR') {
       screenLock = true;
+      screenArray = [];
+      screenArray.push(answer);
       screen.text(answer);
     }
     screen.text(answer);
+    screenArray = [];
+    screenArray.push(answer);
   });
 });
