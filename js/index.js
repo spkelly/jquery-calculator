@@ -5,6 +5,7 @@ $(document).ready(function() {
     let numberArray = [];
     let currentNumber = 0;
 
+    // seperates numbers and operators into two seperate arrays
     for (let i = 0; i < scrnArray.length; i++) {
       if (opArray.includes(scrnArray[i])) {
         // check to see if this is the first thing inputed or
@@ -13,6 +14,7 @@ $(document).ready(function() {
           return 'ERROR';
         }
         else if (scrnArray[i] === '=') {
+          // check if no other operands where used besides equals sign
           if (i === 1) {
             return currentNumber;
           }
@@ -32,7 +34,7 @@ $(document).ready(function() {
 
     let currentAnswer = parseFloat(numberArray[0]);
 
-    // check if no other operands where used besides equals sign
+
     for (let i = 0; i < usedOperands.length; i++) {
       let nextDigit = numberArray[i + 1];
 
