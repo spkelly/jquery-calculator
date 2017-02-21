@@ -49,7 +49,7 @@ $(document).ready(function() {
           currentAnswer *= parseFloat(nextDigit);
           break;
         case '÷':
-          if (nextDigit === '0') {
+          if (nextDigit == '0') {
             return 'ERROR';
           }
           currentAnswer /= parseFloat(nextDigit);
